@@ -11,18 +11,18 @@ export const register = async (req, res) => {
         const newUser = new User({
             username,
             email,
-            password: passwordHash // Store hashed password in database instead of plain text 
+            password: passwordHash
         });
 
         const userSaved = await newUser.save();
         const token = await createAccesToken({ id: userSaved._id });
 
-        res.cookie('token', token);
+        res.cookie('token', token, { httpOnly: true });
         res.json({
             id: userSaved._id,
             username: userSaved.username,
             email: userSaved.email,
-            ceatedAt: userSaved.createdAt,
+            createdAt: userSaved.createdAt,
             updatedAt: userSaved.updatedAt,
         });
     } catch (error) {
@@ -43,12 +43,12 @@ export const login = async (req, res) => {
 
         const token = await createAccesToken({ id: userFound._id });
 
-        res.cookie('token', token);
+        res.cookie('token', token, { httpOnly: true });
         res.json({
             id: userFound._id,
             username: userFound.username,
             email: userFound.email,
-            ceatedAt: userFound.createdAt,
+            createdAt: userFound.createdAt,
             updatedAt: userFound.updatedAt,
         });
     } catch (error) {
@@ -70,7 +70,7 @@ export const profile = async (req, res) => {
         id: userFound._id,
         username: userFound.username,
         email: userFound.email,
-        ceatedAt: userFound.createdAt,
+        createdAt: userFound.createdAt,
         updatedAt: userFound.updatedAt,
     });
 };
